@@ -1,0 +1,39 @@
+name: ShopSmart CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run setup script
+        run: |
+          chmod +x setup-shopsmart.sh
+          ./setup-shopsmart.sh
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm install
+
+      - name: Build server (if build script exists)
+        working-directory: server
+        run: |
+          if npm run | grep -q build; then
+            npm run build
+          else
+            echo "No build script found, skipping..."
+          fi
+
