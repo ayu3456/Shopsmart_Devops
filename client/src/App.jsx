@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -70,11 +70,7 @@ function App() {
         <div className="container">
             <header>
                 <h1>ShopSmart</h1>
-                {status && (
-                    <div className="status-badge">
-                        Backend: {status.status}
-                    </div>
-                )}
+                {status && <div className="status-badge">Backend: {status.status}</div>}
             </header>
 
             <div className="card">
@@ -82,23 +78,51 @@ function App() {
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="name">Name</label>
-                        <input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
+                        <input
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="description">Description</label>
-                        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} />
+                        <textarea
+                            id="description"
+                            name="description"
+                            value={formData.description}
+                            onChange={handleInputChange}
+                        />
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                         <div className="form-group">
                             <label htmlFor="price">Price</label>
-                            <input id="price" name="price" type="number" step="0.01" value={formData.price} onChange={handleInputChange} required />
+                            <input
+                                id="price"
+                                name="price"
+                                type="number"
+                                step="0.01"
+                                value={formData.price}
+                                onChange={handleInputChange}
+                                required
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="stock">Stock</label>
-                            <input id="stock" name="stock" type="number" value={formData.stock} onChange={handleInputChange} required />
+                            <input
+                                id="stock"
+                                name="stock"
+                                type="number"
+                                value={formData.stock}
+                                onChange={handleInputChange}
+                                required
+                            />
                         </div>
                     </div>
-                    <button type="submit" className="btn">Add Product</button>
+                    <button type="submit" className="btn">
+                        Add Product
+                    </button>
                 </form>
             </div>
 
@@ -111,13 +135,18 @@ function App() {
                         {products.length === 0 ? (
                             <p>No products found. Start by adding one!</p>
                         ) : (
-                            products.map(p => (
+                            products.map((p) => (
                                 <div key={p.id} className="product-card">
                                     <h3>{p.name}</h3>
                                     <p className="description">{p.description}</p>
                                     <p className="price">${parseFloat(p.price).toFixed(2)}</p>
                                     <p className="stock">In Stock: {p.stock}</p>
-                                    <button onClick={() => deleteProduct(p.id)} className="btn btn-danger">Delete</button>
+                                    <button
+                                        onClick={() => deleteProduct(p.id)}
+                                        className="btn btn-danger"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             ))
                         )}
@@ -125,7 +154,7 @@ function App() {
                 )}
             </div>
         </div>
-    )
+    );
 }
 
-export default App
+export default App;
