@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
@@ -14,9 +14,16 @@ describe('App Component', () => {
             if (url.includes('/api/products')) {
                 return Promise.resolve({
                     ok: true,
-                    json: () => Promise.resolve([
-                        { id: 1, name: 'Test Product', description: 'Test Desc', price: 10, stock: 5 }
-                    ]),
+                    json: () =>
+                        Promise.resolve([
+                            {
+                                id: 1,
+                                name: 'Test Product',
+                                description: 'Test Desc',
+                                price: 10,
+                                stock: 5,
+                            },
+                        ]),
                 });
             }
             return Promise.reject(new Error('Unknown URL'));

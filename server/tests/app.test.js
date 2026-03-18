@@ -1,12 +1,10 @@
 const request = require('supertest');
 const app = require('../src/app');
-const prisma = require('../src/db');
 
 describe('ShopSmart API Tests', () => {
-    
     // Clear DB between tests if needed, or just run them sequentially
     // Before all tests, we can seed or clean
-    
+
     describe('GET /api/health', () => {
         it('should return 200 and status ok', async () => {
             const res = await request(app).get('/api/health');
@@ -19,17 +17,15 @@ describe('ShopSmart API Tests', () => {
         let createdProductId;
 
         it('should create a new product', async () => {
-            const res = await request(app)
-                .post('/api/products')
-                .send({
-                    name: 'Test Laptop',
-                    description: 'High performance laptop',
-                    price: 999.99,
-                    stock: 10
-                });
-            
+            const res = await request(app).post('/api/products').send({
+                name: 'Test Laptop',
+                description: 'High performance laptop',
+                price: 999.99,
+                stock: 10,
+            });
+
             if (res.statusCode !== 201) console.error(res.body);
-            
+
             expect(res.statusCode).toEqual(201);
             expect(res.body.name).toBe('Test Laptop');
             createdProductId = res.body.id;
@@ -49,14 +45,12 @@ describe('ShopSmart API Tests', () => {
         });
 
         it('should update a product', async () => {
-            const res = await request(app)
-                .put(`/api/products/${createdProductId}`)
-                .send({
-                    name: 'Updated Laptop',
-                    price: 899.99,
-                    stock: 5
-                });
-            
+            const res = await request(app).put(`/api/products/${createdProductId}`).send({
+                name: 'Updated Laptop',
+                price: 899.99,
+                stock: 5,
+            });
+
             expect(res.statusCode).toEqual(200);
             expect(res.body.name).toBe('Updated Laptop');
             expect(res.body.price).toBe(899.99);
