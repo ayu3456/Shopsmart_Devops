@@ -19,7 +19,7 @@ test.describe('ShopSmart E2E Tests', () => {
         await page.click('button:has-text("Add Product")');
 
         // Check for product in inventory
-        await expect(page.locator('.product-card')).toContainText(productName);
+        await expect(page.getByText(productName)).toBeVisible();
 
         // Find delete button for this specific product and click it
         const productCard = page.locator('.product-card', { hasText: productName });
