@@ -39,4 +39,6 @@ For a detailed breakdown of the architecture, design decisions, and challenges w
 -   Glassmorphic UI Design
 -   Real-time Frontend Health Status
 -   Automated Dependabot Security Updates
--   Automated Linting (ESLint + Prettier) on PRs
+-   Automated Linting (ESLint + Prettier) on PRs 
+
+this readme is little bit changed.
