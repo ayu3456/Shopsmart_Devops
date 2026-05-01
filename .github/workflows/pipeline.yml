@@ -81,6 +81,18 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
+      - name: Import Existing Resources (Workaround for Local State)
+        run: |
+          # Import ECR if exists
+          aws ecr describe-repositories --repository-names shopsmart-repo >/dev/null 2>&1 && terraform import aws_ecr_repository.shopsmart_repo shopsmart-repo || echo "ECR not found, will create"
+          
+          # Import SG if exists
+          VPC_ID=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true --query 'Vpcs[0].VpcId' --output text)
+          SG_ID=$(aws ec2 describe-security-groups --filters Name=group-name,Values=shopsmart-ecs-sg Name=vpc-id,Values=$VPC_ID --query 'SecurityGroups[0].GroupId' --output text 2>/dev/null || echo "None")
+          if [ "$SG_ID" != "None" ] && [ -n "$SG_ID" ]; then
+            terraform import aws_security_group.ecs_sg $SG_ID || echo "SG import failed or already imported"
+          fi
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
