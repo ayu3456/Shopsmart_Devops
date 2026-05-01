@@ -32,12 +32,12 @@ jobs:
           cd server
           npm ci
           npx prisma generate
-          npx prisma db push
+          DATABASE_URL="file:./dev.db" npx prisma db push
 
       - name: Run Server Tests and Generate Reports
         run: |
           cd server
-          npm test -- --coverage
+          DATABASE_URL="file:./dev.db" npm test -- --coverage
           
       - name: Install Client Dependencies
         run: |
