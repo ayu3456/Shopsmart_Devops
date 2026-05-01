@@ -13,6 +13,7 @@ env:
   ECS_CLUSTER: shopsmart-cluster
   ECS_TASK_DEFINITION: shopsmart-task
   CONTAINER_NAME: shopsmart-container
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   test:
