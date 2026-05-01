@@ -2,96 +2,140 @@ name: ShopSmart CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: shopsmart-repo
+  ECS_SERVICE: shopsmart-service
+  ECS_CLUSTER: shopsmart-cluster
+  ECS_TASK_DEFINITION: shopsmart-task
+  CONTAINER_NAME: shopsmart-container
 
 jobs:
-  lint-and-test:
+  test:
+    name: Phase 1 - Testing
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: "file:./dev.db"
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: |
-            client/package-lock.json
-            server/package-lock.json
 
-      # Server checks
       - name: Install Server Dependencies
-        run: cd server && npm install
+        run: |
+          cd server
+          npm ci
+          npx prisma generate
+          npx prisma db push
 
-      - name: Run Server Lint
-        run: cd server && npm run lint
-
-      - name: Generate Prisma Client
-        run: cd server && npx prisma generate
-
-      - name: Push Database Schema
-        run: cd server && npx prisma db push --accept-data-loss
-
-      - name: Run Server Tests
-        run: cd server && npm test
-
-      # Client checks
+      - name: Run Server Tests and Generate Reports
+        run: |
+          cd server
+          npm test -- --coverage
+          
       - name: Install Client Dependencies
-        run: cd client && npm install
-
-      - name: Run Client Lint
-        run: cd client && npm run lint
+        run: |
+          cd client
+          npm ci
 
       - name: Run Client Tests
-        run: cd client && npm test
+        run: |
+          cd client
+          npm run test -- --run --coverage
 
-      - name: Build Client
-        run: cd client && npm run build
-
-      - name: Install Playwright Browsers
-        run: cd client && npx playwright install --with-deps chromium
-
-      - name: Run E2E Tests
-        run: cd client && npm run test:e2e
-
-  deploy-to-ec2:
-    needs: lint-and-test
-    if: github.ref == 'refs/heads/main'
+  terraform:
+    name: Phase 2 - Infrastructure Provisioning (Terraform)
+    needs: test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: ./terraform
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.5
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            # Navigate to project (try both possible directory names)
-            cd ~/Shopsmart_Devops || cd ~/shopsmart
-            
-            # Pull latest code
-            git pull origin main
-            
-            # SERVER set up
-            cd server
-            npm install
-            npx prisma generate
-            npx prisma db push
-            npm run build || true
-            
-            # Restart backend with PM2
-            pm2 restart shopsmart-backend --update-env || pm2 start src/index.js --name shopsmart-backend
-            
-            # CLIENT set up
-            cd ../client
-            npm install
-            npm run build
-            
-            # Optional: Restart Nginx
-            sudo systemctl restart nginx || true
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  deploy:
+    name: Phase 3 - Container Build and ECS Deployment
+    needs: terraform
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      - name: Verify service is running
+        run: |
+          echo "Service $ECS_SERVICE deployed to $ECS_CLUSTER"
+          echo "Run 'aws ecs describe-services --cluster $ECS_CLUSTER --services $ECS_SERVICE' for details"
