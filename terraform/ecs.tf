@@ -37,7 +37,7 @@ locals {
     local.subnets_per_az[local.availability_zones[0]],
   ]
   database_url = format(
-    "postgresql://shopsmart:%s@%s:%s/shopsmart",
+    "postgresql://shopsmart:%s@%s:%s/shopsmart?uselibpqcompat=true&sslmode=require",
     random_password.db.result,
     aws_db_instance.postgres.address,
     aws_db_instance.postgres.port,
@@ -176,6 +176,7 @@ resource "aws_ecs_task_definition" "app" {
         { name = "PORT", value = tostring(var.container_port) },
         { name = "NODE_ENV", value = "production" },
         { name = "DATABASE_URL", value = local.database_url },
+        { name = "PGSSLMODE", value = "require" },
         { name = "JWT_SECRET", value = random_password.jwt_secret.result },
       ]
     }
