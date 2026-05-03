@@ -9,14 +9,14 @@ export default function FAQ() {
       a: "Users + hashed passwords live in Postgres. Sessions are JWTs in httpOnly cookies.",
     },
     {
-      q: "Why neobrutalism?",
-      a: "High-contrast borders make it obvious when layout breaks. Also: it slaps.",
+      q: "Why black and white?",
+      a: "A monochrome palette keeps the UI clean and readable while still highlighting structure.",
     },
   ];
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-16 space-y-8">
-      <div className="border-b-4 border-neo-ink pb-6">
+      <div className="border-b-2 border-neo-ink pb-6">
         <p className="font-display uppercase text-xs tracking-[0.2em] text-neutral-600 mb-2">
           FAQ page
         </p>
@@ -26,7 +26,7 @@ export default function FAQ() {
         {items.map(({ q, a }) => (
           <li
             key={q}
-            className="border-4 border-neo-ink bg-neo-paper p-6 shadow-neo hover:-translate-y-0.5 transition-transform"
+            className="border-2 border-neo-ink bg-neo-paper p-6 shadow-neo hover:-translate-y-0.5 transition-transform"
           >
             <p className="font-display uppercase text-sm mb-2">{q}</p>
             <p className="font-medium text-neutral-800">{a}</p>

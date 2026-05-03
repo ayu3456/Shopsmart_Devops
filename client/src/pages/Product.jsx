@@ -52,13 +52,13 @@ export default function Product() {
   if (error || !product) {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 space-y-6">
-        <div className="border-4 border-neo-ink bg-neo-pink p-6 shadow-neo">
+        <div className="border-2 border-neo-ink bg-neo-pink p-6 shadow-neo">
           <p className="font-display uppercase text-xl mb-2">Missed connection</p>
           <p>{error}</p>
         </div>
         <Link
           to="/collections"
-          className="inline-block border-4 border-neo-ink bg-neo-yellow px-6 py-3 font-display uppercase shadow-neo"
+          className="inline-block border-2 border-neo-ink bg-neo-yellow px-6 py-3 font-display uppercase shadow-neo"
         >
           ← Back to shop
         </Link>
@@ -71,13 +71,13 @@ export default function Product() {
       <button
         type="button"
         onClick={() => navigate(-1)}
-        className="mb-8 border-4 border-neo-ink bg-neo-paper px-4 py-2 font-bold uppercase text-xs shadow-neo hover:bg-neo-mint transition-colors"
+        className="mb-8 border-2 border-neo-ink bg-neo-paper px-4 py-2 font-bold uppercase text-xs shadow-neo hover:bg-neo-mint transition-colors"
       >
         ← Back
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <div className="border-4 border-neo-ink shadow-[12px_12px_0_0_#0a0a0a] bg-neo-cream">
+        <div className="border-2 border-neo-ink shadow-neo bg-neo-cream">
           <img
             src={product.image_url}
             alt=""
@@ -86,13 +86,13 @@ export default function Product() {
         </div>
 
         <div className="space-y-6">
-          <p className="inline-block border-4 border-neo-ink bg-neo-blue text-neo-paper font-display uppercase text-xs px-3 py-1 shadow-neo-sm">
+          <p className="inline-block border-2 border-neo-ink bg-neo-blue text-neo-paper font-display uppercase text-xs px-3 py-1 shadow-neo-sm">
             {product.category}
           </p>
           <h1 className="font-display text-4xl sm:text-5xl uppercase leading-tight">
             {product.name}
           </h1>
-          <p className="text-lg font-medium max-w-lg border-l-4 border-neo-yellow pl-4">
+          <p className="text-lg font-medium max-w-lg border-l-2 border-neo-yellow pl-4">
             {product.description}
           </p>
           <p className="font-display text-3xl">{formatPrice(product.price_cents)}</p>
@@ -106,20 +106,20 @@ export default function Product() {
                 max={99}
                 value={qty}
                 onChange={(e) => setQty(Number(e.target.value) || 1)}
-                className="w-16 border-4 border-neo-ink bg-neo-paper px-2 py-2 font-bold text-center"
+                className="w-16 border-2 border-neo-ink bg-neo-paper px-2 py-2 font-bold text-center"
               />
             </label>
             <button
               type="button"
               onClick={handleAdd}
-              className="border-4 border-neo-ink bg-neo-yellow px-8 py-4 font-display uppercase shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-neo-sm transition-transform"
+              className="border-2 border-neo-ink bg-neo-yellow px-8 py-4 font-display uppercase shadow-neo hover:translate-x-1 hover:translate-y-1 hover:shadow-neo-sm transition-transform"
             >
               Add to cart
             </button>
           </div>
 
           <p className="text-sm text-neutral-700 max-w-md">
-            Cart syncs in your browser for now — classic MVP brutalism. Sign in to
+            Cart syncs in your browser for now — classic MVP setup. Sign in to
             prove this stack ships auth too.
           </p>
         </div>

@@ -14,7 +14,7 @@ export default function Cart() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-4 border-neo-ink pb-8">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-neo-ink pb-8">
         <div>
           <p className="font-display uppercase text-xs tracking-[0.2em] text-neutral-600 mb-1">
             Browser cart
@@ -23,21 +23,21 @@ export default function Cart() {
         </div>
         <Link
           to="/collections"
-          className="border-4 border-neo-ink bg-neo-yellow px-4 py-2 font-bold uppercase text-xs shadow-neo"
+          className="border-2 border-neo-ink bg-neo-yellow px-4 py-2 font-bold uppercase text-xs shadow-neo"
         >
           Keep shopping
         </Link>
       </div>
 
       {items.length === 0 ? (
-        <div className="border-4 border-dashed border-neo-ink bg-neo-cream p-10 text-center space-y-4">
+        <div className="border-2 border-dashed border-neo-ink bg-neo-cream p-10 text-center space-y-4">
           <p className="font-display text-xl uppercase">Empty tote</p>
           <p className="font-medium text-neutral-700">
             Add products from the shop — we keep this cart in localStorage.
           </p>
           <Link
             to="/collections"
-            className="inline-block border-4 border-neo-ink bg-neo-mint px-6 py-3 font-display uppercase shadow-neo"
+            className="inline-block border-2 border-neo-ink bg-neo-mint px-6 py-3 font-display uppercase shadow-neo"
           >
             Browse catalog
           </Link>
@@ -47,9 +47,9 @@ export default function Cart() {
           {items.map((line) => (
             <li
               key={line.slug}
-              className="flex flex-col sm:flex-row gap-4 border-4 border-neo-ink bg-neo-paper shadow-neo p-4"
+              className="flex flex-col sm:flex-row gap-4 border-2 border-neo-ink bg-neo-paper shadow-neo p-4"
             >
-              <div className="w-full sm:w-28 h-28 border-4 border-neo-ink shrink-0 overflow-hidden bg-neo-bg">
+              <div className="w-full sm:w-28 h-28 border-2 border-neo-ink shrink-0 overflow-hidden bg-neo-bg">
                 <img
                   src={line.image_url}
                   alt=""
@@ -77,13 +77,13 @@ export default function Cart() {
                       onChange={(e) =>
                         setQty(line.slug, Number(e.target.value) || 1)
                       }
-                      className="w-16 border-4 border-neo-ink bg-neo-bg px-2 py-1 font-bold text-center"
+                      className="w-16 border-2 border-neo-ink bg-neo-bg px-2 py-1 font-bold text-center"
                     />
                   </label>
                   <button
                     type="button"
                     onClick={() => removeLine(line.slug)}
-                    className="border-4 border-neo-ink bg-neo-pink px-3 py-1 font-bold uppercase text-xs shadow-neo-sm"
+                    className="border-2 border-neo-ink bg-neo-pink px-3 py-1 font-bold uppercase text-xs shadow-neo-sm"
                   >
                     Remove
                   </button>
@@ -95,7 +95,7 @@ export default function Cart() {
       )}
 
       {items.length > 0 ? (
-        <div className="border-4 border-neo-ink bg-neo-blue text-neo-paper p-6 shadow-neo flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="border-2 border-neo-ink bg-neo-blue text-neo-paper p-6 shadow-neo flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <p className="font-display uppercase text-xs tracking-widest opacity-90">
               Subtotal
@@ -106,13 +106,13 @@ export default function Cart() {
             <button
               type="button"
               onClick={() => clear()}
-              className="border-4 border-neo-paper bg-transparent text-neo-paper px-4 py-3 font-display uppercase text-sm hover:bg-neo-paper hover:text-neo-ink transition-colors"
+              className="border-2 border-neo-paper bg-transparent text-neo-paper px-4 py-3 font-display uppercase text-sm hover:bg-neo-paper hover:text-neo-ink transition-colors"
             >
               Clear
             </button>
             <button
               type="button"
-              className="border-4 border-neo-ink bg-neo-yellow text-neo-ink px-6 py-3 font-display uppercase shadow-neo opacity-80 cursor-not-allowed"
+              className="border-2 border-neo-ink bg-neo-yellow text-neo-ink px-6 py-3 font-display uppercase shadow-neo opacity-80 cursor-not-allowed"
               title="Checkout not wired — demo storefront"
               disabled
             >

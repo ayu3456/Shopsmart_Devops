@@ -4,25 +4,25 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Space Grotesk"', "system-ui", "sans-serif"],
-        display: ['"Archivo Black"', "system-ui", "sans-serif"],
+        sans: ['"Manrope"', "system-ui", "sans-serif"],
+        display: ['"Bebas Neue"', "system-ui", "sans-serif"],
       },
       colors: {
         neo: {
-          bg: "#fff4e6",
-          ink: "#0a0a0a",
-          yellow: "#ffe500",
-          pink: "#ff6b9d",
-          mint: "#6dffc6",
-          blue: "#4d9fff",
-          lilac: "#c4a1ff",
-          cream: "#fff8ee",
+          bg: "#f7f7f7",
+          ink: "#111111",
+          yellow: "#ffffff",
+          pink: "#e8e8e8",
+          mint: "#dedede",
+          blue: "#1a1a1a",
+          lilac: "#d4d4d4",
+          cream: "#efefef",
           paper: "#ffffff",
         },
       },
       boxShadow: {
-        neo: "6px 6px 0 0 #0a0a0a",
-        "neo-sm": "4px 4px 0 0 #0a0a0a",
+        neo: "0 14px 30px -20px rgba(0, 0, 0, 0.55)",
+        "neo-sm": "0 10px 22px -16px rgba(0, 0, 0, 0.5)",
       },
     },
   },

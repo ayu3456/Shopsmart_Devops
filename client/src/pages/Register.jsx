@@ -26,7 +26,7 @@ export default function Register() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
-      <div className="border-4 border-neo-ink bg-neo-paper shadow-[12px_12px_0_0_#ff6b9d] p-8 space-y-6">
+      <div className="border-2 border-neo-ink bg-neo-paper shadow-neo p-8 space-y-6">
         <h1 className="font-display text-3xl uppercase">Sign up</h1>
         <p className="text-sm font-medium text-neutral-700">
           Stored in RDS Postgres — bcrypt hashed passwords, nothing fancy on purpose.
@@ -41,7 +41,7 @@ export default function Register() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-4 border-neo-ink bg-neo-bg px-3 py-3 font-medium focus:outline-none focus:bg-neo-lilac"
+              className="w-full border-2 border-neo-ink bg-neo-bg px-3 py-3 font-medium focus:outline-none focus:bg-neo-lilac"
             />
           </label>
           <label className="block space-y-1">
@@ -53,12 +53,12 @@ export default function Register() {
               minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border-4 border-neo-ink bg-neo-bg px-3 py-3 font-medium focus:outline-none focus:bg-neo-lilac"
+              className="w-full border-2 border-neo-ink bg-neo-bg px-3 py-3 font-medium focus:outline-none focus:bg-neo-lilac"
             />
           </label>
 
           {error ? (
-            <p className="border-4 border-neo-ink bg-neo-pink px-3 py-2 font-bold text-sm">
+            <p className="border-2 border-neo-ink bg-neo-pink px-3 py-2 font-bold text-sm">
               {error}
             </p>
           ) : null}
@@ -66,15 +66,15 @@ export default function Register() {
           <button
             type="submit"
             disabled={pending}
-            className="w-full border-4 border-neo-ink bg-neo-mint py-4 font-display uppercase shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-neo-sm transition-transform disabled:opacity-60"
+            className="w-full border-2 border-neo-ink bg-neo-mint py-4 font-display uppercase shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-neo-sm transition-transform disabled:opacity-60"
           >
             {pending ? "Creating…" : "Join"}
           </button>
         </form>
 
         <p className="text-sm font-medium">
-          Already brutalist?{" "}
-          <Link to="/login" className="underline decoration-4 decoration-neo-yellow font-bold">
+          Already registered?{" "}
+          <Link to="/login" className="underline decoration-2 decoration-neo-yellow font-bold">
             Log in
           </Link>
         </p>

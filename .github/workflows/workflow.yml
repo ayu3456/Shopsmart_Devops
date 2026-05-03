@@ -130,7 +130,7 @@ jobs:
         run: terraform plan -no-color -out=tfplan
 
   deploy:
-    name: Push monolith image and apply Terraform
+    name: Push image and apply Terraform
     needs: [test, terraform]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest

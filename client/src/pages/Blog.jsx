@@ -21,7 +21,7 @@ const posts = [
 export default function Blog() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-16 space-y-10">
-      <div className="border-4 border-neo-ink bg-neo-lilac shadow-neo p-8 sm:p-10">
+      <div className="border-2 border-neo-ink bg-neo-lilac shadow-neo p-8 sm:p-10">
         <p className="font-display uppercase text-xs tracking-[0.3em] mb-3">
           Blog page
         </p>
@@ -36,10 +36,10 @@ export default function Blog() {
         {posts.map((post) => (
           <li
             key={post.title}
-            className="border-4 border-neo-ink bg-neo-paper p-6 shadow-neo flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
+            className="border-2 border-neo-ink bg-neo-paper p-6 shadow-neo flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
           >
             <div>
-              <span className="inline-block border-4 border-neo-ink bg-neo-yellow px-2 py-0.5 font-display uppercase text-[10px] mb-2">
+              <span className="inline-block border-2 border-neo-ink bg-neo-yellow px-2 py-0.5 font-display uppercase text-[10px] mb-2">
                 {post.tag}
               </span>
               <h2 className="font-display text-2xl uppercase leading-tight">
@@ -49,7 +49,7 @@ export default function Blog() {
             </div>
             <Link
               to="/collections"
-              className="shrink-0 self-start border-4 border-neo-ink bg-neo-mint px-4 py-2 font-bold uppercase text-xs shadow-neo-sm whitespace-nowrap"
+              className="shrink-0 self-start border-2 border-neo-ink bg-neo-mint px-4 py-2 font-bold uppercase text-xs shadow-neo-sm whitespace-nowrap"
             >
               Shop related →
             </Link>
