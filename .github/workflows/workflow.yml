@@ -220,7 +220,7 @@ jobs:
         run: echo "repo_url=$(terraform output -raw ecr_repository_url)" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to Amazon ECR
         id: login-ecr
